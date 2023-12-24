@@ -6,13 +6,12 @@
 /*   By: mmouhiid <mmouhiid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 22:25:13 by mmouhiid          #+#    #+#             */
-/*   Updated: 2023/12/24 16:09:50 by mmouhiid         ###   ########.fr       */
+/*   Updated: 2023/12/24 18:26:40 by mmouhiid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft/libft.h"
 #include "get_next_line/get_next_line.h"
-#include <stdio.h>
 
 int	ft_strcmp(char *s1, char *s2)
 {
@@ -98,15 +97,112 @@ t_list	*get_operations()
 	return (operations);
 }
 
-t_list	*apply_operations(t_list *stack_a, t_list *stack_b, char **operations)
+t_list	*swap(t_list *stack)
 {
+	int	*tmp;
 
+	if (stack && stack->next)
+	{
+		tmp = stack->content;
+		stack->content = stack->next->content;
+		stack->next->content = tmp;
+	}
+	return (stack);
+}
+
+t_list	*push(t_list *stack_a, t_list *stack_b)
+{
+	t_list	*tmp;
+
+	if (stack_b)
+	{
+		tmp = stack_b->next;
+		stack_b->next = stack_a;
+		stack_a = stack_b;
+		stack_b = tmp;
+	}
+	return (stack_a);
+}
+
+t_list	*rotate(t_list *stack)
+{
+	t_list	*tmp;
+	t_list	*last;
+
+	if (stack && stack->next)
+	{
+		tmp = stack;
+		stack = stack->next;
+		last = stack;
+		while (last->next)
+			last = last->next;
+		last->next = tmp;
+		tmp->next = NULL;
+	}
+	return (stack);
+}
+
+t_list	*reverse_rotate(t_list *stack)
+{
+	t_list	*tmp;
+	t_list	*last;
+
+	if (stack && stack->next)
+	{
+		last = stack;
+		while (last->next->next)
+			last = last->next;
+		tmp = last->next;
+		last->next = NULL;
+		tmp->next = stack;
+		stack = tmp;
+	}
+	return (stack);
+}
+
+t_list	*apply_operations(t_list *stack_a, t_list *stack_b, t_list *operations)
+{
+	while (operations)
+	{
+		if (!ft_strcmp(operations->content, "sa"))
+			stack_a = swap(stack_a);
+		else if (!ft_strcmp(operations->content, "sb"))
+			stack_b = swap(stack_b);
+		else if (!ft_strcmp(operations->content, "ss"))
+		{
+			stack_a = swap(stack_a);
+			stack_b = swap(stack_b);
+		}
+		else if (!ft_strcmp(operations->content, "pa"))
+			stack_a = push(stack_a, stack_b);
+		else if (!ft_strcmp(operations->content, "pb"))
+			stack_b = push(stack_b, stack_a);
+		else if (!ft_strcmp(operations->content, "ra"))
+			stack_a = rotate(stack_a);
+		else if (!ft_strcmp(operations->content, "rb"))
+			stack_b = rotate(stack_b);
+		else if (!ft_strcmp(operations->content, "rr"))
+		{
+			stack_a = rotate(stack_a);
+			stack_b = rotate(stack_b);
+		}
+		else if (!ft_strcmp(operations->content, "rra"))
+			stack_a = reverse_rotate(stack_a);
+		else if (!ft_strcmp(operations->content, "rrb"))
+			stack_b = reverse_rotate(stack_b);
+		else if (!ft_strcmp(operations->content, "rrr"))
+		{
+			stack_a = reverse_rotate(stack_a);
+			stack_b = reverse_rotate(stack_b);
+		}
+		operations = operations->next;
+	}
+	return (stack_a);
 }
 
 int	main(int argc, char **argv)
 {
 	int		i;
-	int		operations_num;
 	int		*num;
 	char	**tmp_nums;
 	t_list	*operations;
