@@ -6,12 +6,13 @@
 /*   By: mmouhiid <mmouhiid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 22:25:13 by mmouhiid          #+#    #+#             */
-/*   Updated: 2023/12/24 18:26:40 by mmouhiid         ###   ########.fr       */
+/*   Updated: 2023/12/25 08:54:638y mmouhiid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft/libft.h"
 #include "get_next_line/get_next_line.h"
+#include <stdio.h>
 
 int	ft_strcmp(char *s1, char *s2)
 {
@@ -30,9 +31,10 @@ int	ft_strcmp(char *s1, char *s2)
 int	is_valid_int(char *str)
 {
 	if (*str == '-')
-		str++;
-	if (!*str || *str == '0')
-		return (0);
+	{
+		if (!*++str || *str == '0')
+			return (0);
+	}
 	while (*str)
 	{
 		if (*str < '0' || *str++ > '9')
@@ -43,27 +45,27 @@ int	is_valid_int(char *str)
 
 int	is_valid_operation(char *operation)
 {
-	if (!ft_strcmp(operation, "sa"))
+	if (!ft_strcmp(operation, "sa\n"))
 		return (1);
-	else if (!ft_strcmp(operation, "sb"))
+	else if (!ft_strcmp(operation, "sb\n"))
 		return (1);
-	else if (!ft_strcmp(operation, "ss"))
+	else if (!ft_strcmp(operation, "ss\n"))
 		return (1);
-	else if (!ft_strcmp(operation, "pa"))
+	else if (!ft_strcmp(operation, "pa\n"))
 		return (1);
-	else if (!ft_strcmp(operation, "pb"))
+	else if (!ft_strcmp(operation, "pb\n"))
 		return (1);
-	else if (!ft_strcmp(operation, "ra"))
+	else if (!ft_strcmp(operation, "ra\n"))
 		return (1);
-	else if (!ft_strcmp(operation, "rb"))
+	else if (!ft_strcmp(operation, "rb\n"))
 		return (1);
-	else if (!ft_strcmp(operation, "rr"))
+	else if (!ft_strcmp(operation, "rr\n"))
 		return (1);
-	else if (!ft_strcmp(operation, "rra"))
+	else if (!ft_strcmp(operation, "rra\n"))
 		return (1);
-	else if (!ft_strcmp(operation, "rrb"))
+	else if (!ft_strcmp(operation, "rrb\n"))
 		return (1);
-	else if (!ft_strcmp(operation, "rrr"))
+	else if (!ft_strcmp(operation, "rrr\n"))
 		return (1);
 	return (0);
 }
@@ -92,8 +94,13 @@ t_list	*get_operations()
 
 	operations = NULL;
 	operation = get_next_line(0);
-	while (operation && is_valid_operation(operation))
+	while (operation)
+	{
+		if (!is_valid_operation(operation))
+			exit_handler();
 		ft_lstadd_back(&operations, ft_lstnew(operation));
+		operation = get_next_line(0);
+	}
 	return (operations);
 }
 
@@ -110,18 +117,17 @@ t_list	*swap(t_list *stack)
 	return (stack);
 }
 
-t_list	*push(t_list *stack_a, t_list *stack_b)
+void	push(t_list **stack_a, t_list **stack_b)
 {
 	t_list	*tmp;
 
-	if (stack_b)
+	if (*stack_a)
 	{
-		tmp = stack_b->next;
-		stack_b->next = stack_a;
-		stack_a = stack_b;
-		stack_b = tmp;
+		tmp = (*stack_a)->next;
+		(*stack_a)->next = *stack_b;
+		*stack_b = *stack_a;
+		*stack_a = tmp;
 	}
-	return (stack_a);
 }
 
 t_list	*rotate(t_list *stack)
@@ -164,33 +170,33 @@ t_list	*apply_operations(t_list *stack_a, t_list *stack_b, t_list *operations)
 {
 	while (operations)
 	{
-		if (!ft_strcmp(operations->content, "sa"))
+		if (!ft_strcmp(operations->content, "sa\n"))
 			stack_a = swap(stack_a);
-		else if (!ft_strcmp(operations->content, "sb"))
+		else if (!ft_strcmp(operations->content, "sb\n"))
 			stack_b = swap(stack_b);
-		else if (!ft_strcmp(operations->content, "ss"))
+		else if (!ft_strcmp(operations->content, "ss\n"))
 		{
 			stack_a = swap(stack_a);
 			stack_b = swap(stack_b);
 		}
-		else if (!ft_strcmp(operations->content, "pa"))
-			stack_a = push(stack_a, stack_b);
-		else if (!ft_strcmp(operations->content, "pb"))
-			stack_b = push(stack_b, stack_a);
-		else if (!ft_strcmp(operations->content, "ra"))
+		else if (!ft_strcmp(operations->content, "pa\n"))
+			push(&stack_b, &stack_a);
+		else if (!ft_strcmp(operations->content, "pb\n"))
+			push(&stack_a, &stack_b);
+		else if (!ft_strcmp(operations->content, "ra\n"))
 			stack_a = rotate(stack_a);
-		else if (!ft_strcmp(operations->content, "rb"))
+		else if (!ft_strcmp(operations->content, "rb\n"))
 			stack_b = rotate(stack_b);
-		else if (!ft_strcmp(operations->content, "rr"))
+		else if (!ft_strcmp(operations->content, "rr\n"))
 		{
 			stack_a = rotate(stack_a);
 			stack_b = rotate(stack_b);
 		}
-		else if (!ft_strcmp(operations->content, "rra"))
+		else if (!ft_strcmp(operations->content, "rra\n"))
 			stack_a = reverse_rotate(stack_a);
-		else if (!ft_strcmp(operations->content, "rrb"))
+		else if (!ft_strcmp(operations->content, "rrb\n"))
 			stack_b = reverse_rotate(stack_b);
-		else if (!ft_strcmp(operations->content, "rrr"))
+		else if (!ft_strcmp(operations->content, "rrr\n"))
 		{
 			stack_a = reverse_rotate(stack_a);
 			stack_b = reverse_rotate(stack_b);
@@ -236,8 +242,6 @@ int	main(int argc, char **argv)
 	if (!is_sorted(stack_a))
 	{
 		operations = get_operations();
-		if (!operations)
-			exit_handler();
 		if (is_sorted(apply_operations(stack_a, stack_b, operations)))
 			ft_putstr_fd("OK\n", 1);
 		else
