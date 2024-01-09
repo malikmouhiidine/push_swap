@@ -6,15 +6,15 @@
 /*   By: mmouhiid <mmouhiid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 22:25:13 by mmouhiid          #+#    #+#             */
-/*   Updated: 2023/12/25 08:54:638y mmouhiid         ###   ########.fr       */
+/*   Updated: 2024/01/08 15:45:37 by mmouhiid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "checker.h"
 
-t_list	*get_operations()
+t_list	*get_operations(void)
 {
-	t_list *operations;
+	t_list	*operations;
 	char	*operation;
 
 	operations = NULL;

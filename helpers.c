@@ -6,7 +6,7 @@
 /*   By: mmouhiid <mmouhiid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 22:25:13 by mmouhiid          #+#    #+#             */
-/*   Updated: 2023/12/25 08:54:638y mmouhiid         ###   ########.fr       */
+/*   Updated: 2024/01/08 15:50:05 by mmouhiid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,8 @@ int	is_sorted(t_list *stack)
 {
 	while (stack && stack->next)
 	{
-		if (stack->next && (*(int *)stack->next->content < *(int *)stack->content))
+		if (stack->next && (*(int *)stack->next->content
+				< *(int *)stack->content))
 			return (0);
 		stack = stack->next;
 	}
