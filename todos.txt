@@ -1,0 +1,9 @@
+- Complete push_swap
+- Merge push_swap with the bonus by resolving the conflict between common files
+- Read the correction page and resolve any issue
+- Check for leaks
+- Create an appropriate Makefile
+- PUSH!
+
+Incha Allah!
+Allah o ma yassir!

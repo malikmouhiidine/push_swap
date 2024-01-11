@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "checker.h"
+#include "header.h"
 
 t_list	*get_operations(void)
 {

@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   checker.c                                          :+:      :+:    :+:   */
+/*   apply_operations.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmouhiid <mmouhiid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 22:25:13 by mmouhiid          #+#    #+#             */
-/*   Updated: 2024/01/09 08:35:42 by mmouhiid         ###   ########.fr       */
+/*   Updated: 2024/01/11 15:47:00 by mmouhiid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "checker.h"
+#include "header.h"
 
 void	apply_swap_push(t_list **stack_a, t_list **stack_b, t_list *operations)
 {
@@ -52,64 +52,12 @@ void	apply_rotate_reverse(t_list **stack_a, t_list **stack_b,
 	}
 }
 
-t_list	*apply_operations(t_list *stack_a, t_list *stack_b, t_list *operations)
+void	apply_operations(t_list **stack_a, t_list **stack_b, t_list *operations)
 {
 	while (operations)
 	{
-		apply_swap_push(&stack_a, &stack_b, operations);
-		apply_rotate_reverse(&stack_a, &stack_b, operations);
+		apply_swap_push(stack_a, stack_b, operations);
+		apply_rotate_reverse(stack_a, stack_b, operations);
 		operations = operations->next;
 	}
-	return (stack_a);
-}
-
-void	iterate_through_args(int argc, char **argv, t_list **stack_a)
-{
-	int		i;
-	int		*num;
-	char	**tmp_nums;
-
-	while (argc-- > 1)
-	{
-		tmp_nums = ft_split(argv[argc], ' ');
-		if (!tmp_nums || !*tmp_nums)
-			exit_handler();
-		i = 0;
-		while (tmp_nums[i])
-			i++;
-		while (i--)
-		{
-			if (is_valid_int(tmp_nums[i]))
-			{
-				num = (int *)malloc(sizeof(int));
-				*num = ft_atoi(tmp_nums[i]);
-				ft_lstadd_front(stack_a, ft_lstnew(num));
-			}
-			else
-				exit_handler();
-		}
-	}
-}
-
-int	main(int argc, char **argv)
-{
-	int		size_diff;
-	t_list	*operations;
-	t_list	*stack_a;
-	t_list	*stack_b;
-
-	if (argc < 2)
-		return (0);
-	stack_a = NULL;
-	stack_b = NULL;
-	iterate_through_args(argc, argv, &stack_a);
-	operations = get_operations();
-	size_diff = ft_lstsize(stack_a);
-	stack_a = apply_operations(stack_a, stack_b, operations);
-	size_diff = ft_lstsize(stack_a) - size_diff;
-	if (is_sorted(stack_a) && size_diff == 0)
-		ft_putstr_fd("OK\n", 1);
-	else
-		ft_putstr_fd("KO\n", 1);
-	return (0);
 }
