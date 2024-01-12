@@ -6,7 +6,7 @@
 /*   By: mmouhiid <mmouhiid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 08:59:16 by mmouhiid          #+#    #+#             */
-/*   Updated: 2024/01/12 12:29:54 by mmouhiid         ###   ########.fr       */
+/*   Updated: 2024/01/12 17:39:58 by mmouhiid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ void	sort_3_numbers(t_list	**stack_a, t_list **stack_b,
 
 t_list	*find_closest_min(t_list *node, t_list **stack_a)
 {
-	t_list *closest;
-	t_list *tmp;
-	int min;
+	t_list	*closest;
+	t_list	*tmp;
+	int		min;
 
 	tmp = *stack_a;
 	min = INT_MAX;
@@ -66,13 +66,13 @@ t_list	*find_max(t_list *stack_a)
 	int		max;
 
 	tmp = stack_a;
-	max = tmp->content;
+	max = *(int *)tmp->content;
 	target = tmp;
 	while (tmp)
 	{
-		if (tmp->content > max)
+		if (*(int *)tmp->content > max)
 		{
-			max = tmp->content;
+			max = *(int *)tmp->content;
 			target = tmp;
 		}
 		tmp = tmp->next;
@@ -83,68 +83,102 @@ t_list	*find_max(t_list *stack_a)
 t_list	*find_target(t_list *node, t_list **stack_b, t_list **stack_a)
 {
 	t_list	*target;
-	
+
 	target = find_closest_min(node, stack_a);
 	if (target == NULL)
 		target = find_max(*stack_a);
 	return (target);
 }
 
-// push node and target to top of their perspective stacks, and keep in mind that you can use rr or rrr to use less operations and by seeing if their both above or below the middle of the stack
-t_list	*push_node_target_totop(t_list **stack_b, t_list **stack_a,
-            t_list *node, t_list *target)
+int	get_index(t_list *stack, t_list *node)
 {
-    t_list	*operations;
-    int		node_index;
-    int		target_index;
+	int		index;
+	t_list	*tmp;
 
-    operations = NULL;
-    node_index = get_index(*stack_b, node);
-    target_index = get_index(*stack_a, target);
-    if (node_index < ft_lstsize(*stack_b) / 2 && target_index < ft_lstsize(*stack_a) / 2)
-    {
-        while (node_index-- && target_index--)
-            ft_lstadd_back(&operations, ft_lstnew("rr\n"));
-        while (node_index-- >= 0)
-            ft_lstadd_back(&operations, ft_lstnew("rb\n"));
-        while (target_index-- >= 0)
-            ft_lstadd_back(&operations, ft_lstnew("ra\n"));
-    }
-    else if (node_index >= ft_lstsize(*stack_b) / 2 && target_index >= ft_lstsize(*stack_a) / 2)
-    {
-        while (node_index++ < ft_lstsize(*stack_b) && target_index++ < ft_lstsize(*stack_a))
-            ft_lstadd_back(&operations, ft_lstnew("rrr\n"));
-        while (node_index++ < ft_lstsize(*stack_b))
-            ft_lstadd_back(&operations, ft_lstnew("rrb\n"));
-        while (target_index++ < ft_lstsize(*stack_a))
-            ft_lstadd_back(&operations, ft_lstnew("rra\n"));
-    }
-    else
-    {
-        if (node_index < ft_lstsize(*stack_b) / 2)
-            while (node_index--)
-                ft_lstadd_back(&operations, ft_lstnew("rb\n"));
-        else
-            while (node_index++ < ft_lstsize(*stack_b))
-                ft_lstadd_back(&operations, ft_lstnew("rrb\n"));
-        if (target_index < ft_lstsize(*stack_a) / 2)
-            while (target_index--)
-                ft_lstadd_back(&operations, ft_lstnew("ra\n"));
-        else
-            while (target_index++ < ft_lstsize(*stack_a))
-                ft_lstadd_back(&operations, ft_lstnew("rra\n"));
-    }
-    return (operations);
+	index = 0;
+	tmp = stack;
+	while (tmp)
+	{
+		if (tmp == node)
+			return (index);
+		index++;
+		tmp = tmp->next;
+	}
+	return (-1);
+}
+
+t_list	*push_node_target_totop(t_list **stack_b, t_list **stack_a,
+		t_list *node, t_list *target)
+{
+	t_list	*operations;
+	int		node_index;
+	int		target_index;
+
+	operations = NULL;
+	node_index = get_index(*stack_b, node);
+	target_index = get_index(*stack_a, target);
+	if (node_index < ft_lstsize(*stack_b) / 2
+		&& target_index < ft_lstsize(*stack_a) / 2)
+	{
+		while (node_index-- && target_index--)
+			ft_lstadd_back(&operations, ft_lstnew("rr\n"));
+		while (node_index-- >= 0)
+			ft_lstadd_back(&operations, ft_lstnew("rb\n"));
+		while (target_index-- >= 0)
+			ft_lstadd_back(&operations, ft_lstnew("ra\n"));
+	}
+	else if (node_index >= ft_lstsize(*stack_b) / 2
+		&& target_index >= ft_lstsize(*stack_a) / 2)
+	{
+		while (node_index++ < ft_lstsize(*stack_b)
+			&& target_index++ < ft_lstsize(*stack_a))
+			ft_lstadd_back(&operations, ft_lstnew("rrr\n"));
+		while (node_index++ < ft_lstsize(*stack_b))
+			ft_lstadd_back(&operations, ft_lstnew("rrb\n"));
+		while (target_index++ < ft_lstsize(*stack_a))
+			ft_lstadd_back(&operations, ft_lstnew("rra\n"));
+	}
+	else
+	{
+		if (node_index < ft_lstsize(*stack_b) / 2)
+			while (node_index--)
+				ft_lstadd_back(&operations, ft_lstnew("rb\n"));
+		else
+			while (node_index++ < ft_lstsize(*stack_b))
+				ft_lstadd_back(&operations, ft_lstnew("rrb\n"));
+		if (target_index < ft_lstsize(*stack_a) / 2)
+			while (target_index--)
+				ft_lstadd_back(&operations, ft_lstnew("ra\n"));
+		else
+			while (target_index++ < ft_lstsize(*stack_a))
+				ft_lstadd_back(&operations, ft_lstnew("rra\n"));
+	}
+	return (operations);
 }
 
 t_list	*push_node_above_target(t_list **stack_b, t_list **stack_a,
 			t_list *node, t_list *target)
 {
 	t_list	*operations;
-	
+
 	operations = push_node_target_totop(stack_b, stack_a, node, target);
 	ft_lstadd_back(&operations, ft_lstnew("pa\n"));
 	return (operations);
+}
+
+void	make_min_on_top(t_list **stack_a, t_list **operations)
+{
+	t_list	*target;
+	int		index;
+
+	target = find_max(*stack_a);
+	index = get_index(*stack_a, target);
+	if (index < ft_lstsize(*stack_a) / 2)
+		while (index--)
+			ft_lstadd_back(operations, ft_lstnew("ra\n"));
+	else
+		while (index++ < ft_lstsize(*stack_a))
+			ft_lstadd_back(operations, ft_lstnew("rra\n"));
 }
 
 void	sort_4_numbers(t_list **stack_a, t_list **stack_b, t_list **operations)
