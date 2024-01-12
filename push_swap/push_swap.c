@@ -6,7 +6,7 @@
 /*   By: mmouhiid <mmouhiid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 08:59:16 by mmouhiid          #+#    #+#             */
-/*   Updated: 2024/01/12 17:39:58 by mmouhiid         ###   ########.fr       */
+/*   Updated: 2024/01/12 22:40:57 by mmouhiid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,7 +200,12 @@ void	turk_sort_numbers(t_list **stack_a, t_list **stack_b,
 {
 	while (!is_sorted(*stack_a))
 	{
-
+		// push two elements to stack b and then assing for each element in stack a a target in stack b 
+		// and then find the cheapest node to get to the target by counting the needed operations
+		// repeat that until stack a has only 3 elements
+		// then sort the 3 elements
+		// then do the same thing but with stack b nodes to stack a targets
+		// finally make the min on top of stack a
 	}
 }
 
