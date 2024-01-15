@@ -6,7 +6,7 @@
 /*   By: mmouhiid <mmouhiid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 08:59:16 by mmouhiid          #+#    #+#             */
-/*   Updated: 2024/01/12 22:40:57 by mmouhiid         ###   ########.fr       */
+/*   Updated: 2024/01/13 10:19:59mouhiid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,13 +80,13 @@ t_list	*find_max(t_list *stack_a)
 	return (target);
 }
 
-t_list	*find_target(t_list *node, t_list **stack_b, t_list **stack_a)
+t_list	*find_target(t_list *node, t_list **stack)
 {
 	t_list	*target;
 
-	target = find_closest_min(node, stack_a);
+	target = find_closest_min(node, stack);
 	if (target == NULL)
-		target = find_max(*stack_a);
+		target = find_max(*stack);
 	return (target);
 }
 
@@ -156,7 +156,7 @@ t_list	*push_node_target_totop(t_list **stack_b, t_list **stack_a,
 	return (operations);
 }
 
-t_list	*push_node_above_target(t_list **stack_b, t_list **stack_a,
+t_list	*push_node_above_target_ops(t_list **stack_b, t_list **stack_a,
 			t_list *node, t_list *target)
 {
 	t_list	*operations;
@@ -189,23 +189,59 @@ void	sort_4_numbers(t_list **stack_a, t_list **stack_b, t_list **operations)
 	push(stack_a, stack_b);
 	sort_3_numbers(stack_a, stack_b, operations);
 	node = *stack_b;
-	target = find_target(node, stack_b, stack_a);
-	ft_lstadd_back(operations, push_node_above_target(stack_b, stack_a, node, target));
+	target = find_target(node, stack_a);
+	ft_lstadd_back(operations, push_node_above_target_ops(stack_b, stack_a, node, target));
 	apply_operations(stack_a, stack_b, *operations);
 	make_min_on_top(stack_a, operations);
 }
 
+// Turk sort algorithm summary:
+// push two elements to stack b and then assing for each element in stack a a target in stack b 
+// and then find the cheapest node to get to the target by counting the needed operations
+// repeat that until stack a has only 3 elements
+// then sort the 3 elements
+// then do the same thing but with stack b nodes to stack a targets
+// finally make the min on top of stack a
 void	turk_sort_numbers(t_list **stack_a, t_list **stack_b,
 			t_list **operations)
 {
-	while (!is_sorted(*stack_a))
+	int		cheapest_score;
+	t_list	*cheapest_node;
+	t_list	*tmp_a;
+	t_list	*tmp_b;
+
+	push(stack_a, stack_b);
+	push(stack_a, stack_b);
+	while (ft_lstsize(*stack_a) > 3)
 	{
-		// push two elements to stack b and then assing for each element in stack a a target in stack b 
-		// and then find the cheapest node to get to the target by counting the needed operations
-		// repeat that until stack a has only 3 elements
-		// then sort the 3 elements
-		// then do the same thing but with stack b nodes to stack a targets
-		// finally make the min on top of stack a
+		tmp_a = *stack_a;
+		cheapest_score = INT_MAX;
+		while (tmp_a)
+		{
+			if (ft_lstsize(push_node_above_target_ops(stack_b, stack_a, tmp_a, find_target(tmp_a, stack_b))) < cheapest_score)
+			{
+				cheapest_score = ft_lstsize(push_node_above_target_ops(stack_b, stack_a, tmp_a, find_target(tmp_a, stack_b)));
+				cheapest_node = tmp_a;
+			}
+			tmp_a = tmp_a->next;
+		}
+		apply_operations(stack_a, stack_b, push_node_above_target_ops(stack_b, stack_a, cheapest_node, find_target(cheapest_node, stack_b)));
+	}
+	sort_3_numbers(stack_a, stack_b, operations);
+	while (*stack_b)
+	{
+		tmp_b = *stack_b;
+		cheapest_score = INT_MAX;
+		while (tmp_b)
+		{
+			if (ft_lstsize(push_node_above_target_ops(stack_b, stack_a, tmp_b, find_target(tmp_b, stack_a))) < cheapest_score)
+			{
+				cheapest_score = ft_lstsize(push_node_above_target_ops(stack_b, stack_a, tmp_b, find_target(tmp_b, stack_a)));
+				cheapest_node = tmp_b;
+			}
+			tmp_b = tmp_b->next;
+		}
+		apply_operations(stack_a, stack_b, push_node_above_target_ops(stack_b, stack_a, cheapest_node, find_target(cheapest_node, stack_a)));
 	}
 }
 
