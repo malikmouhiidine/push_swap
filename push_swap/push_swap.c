@@ -207,36 +207,68 @@ t_list	*push_node_target_totop(t_list **stack_b, t_list **stack_a,
     stack_a_size = ft_lstsize(*stack_a);
     if (node_index < (float)stack_b_size / 2.0 && target_index < (float)stack_a_size / 2.0)
     {
-        while (node_index-- > 0 && target_index-- > 0)
+        while (node_index > 0 && target_index > 0)
+        {
             ft_lstadd_back(&operations, ft_lstnew("rr\n"));
-        while (node_index-- > 0)
+            node_index--;
+            target_index--;
+        }
+        while (node_index > 0)
+        {
             ft_lstadd_back(&operations, ft_lstnew("rb\n"));
-        while (target_index-- > 0)
+            node_index--;
+        }
+        while (target_index > 0)
+        {
             ft_lstadd_back(&operations, ft_lstnew("ra\n"));
+            target_index--;
+        }
     }
     else if (node_index >= (float)stack_b_size / 2.0 && target_index >= (float)stack_a_size / 2.0)
     {
-        while (node_index++ < stack_b_size && target_index++ < stack_a_size)
+        while (node_index < stack_b_size && target_index < stack_a_size)
+        {
             ft_lstadd_back(&operations, ft_lstnew("rrr\n"));
-        while (node_index++ < stack_b_size)
+            node_index++;
+            target_index++;
+        }
+        while (node_index < stack_b_size)
+        {
             ft_lstadd_back(&operations, ft_lstnew("rrb\n"));
-        while (target_index++ < stack_a_size)
+            node_index++;
+        }
+        while (target_index < stack_a_size)
+        {
             ft_lstadd_back(&operations, ft_lstnew("rra\n"));
+            target_index++;
+        }
     }
     else
     {
         if (node_index < (float)stack_b_size / 2.0)
-            while (node_index-- > 0)
+            while (node_index > 0)
+            {
                 ft_lstadd_back(&operations, ft_lstnew("rb\n"));
+                node_index--;
+            }
         else
-            while (node_index++ < stack_b_size)
+            while (node_index < stack_b_size)
+            {
                 ft_lstadd_back(&operations, ft_lstnew("rrb\n"));
+                node_index++;
+            }
         if (target_index < (float)stack_a_size / 2.0)
-            while (target_index-- > 0)
+            while (target_index > 0)
+            {
                 ft_lstadd_back(&operations, ft_lstnew("ra\n"));
+                target_index--;
+            }
         else
-            while (target_index++ < stack_a_size)
+            while (target_index < stack_a_size)
+            {
                 ft_lstadd_back(&operations, ft_lstnew("rra\n"));
+                target_index++;
+            }
     }
     return (operations);
 }
@@ -261,17 +293,21 @@ t_list	*make_min_on_top_ops(t_list **stack_a)
 
 void	sort_4_numbers(t_list **stack_a, t_list **stack_b, t_list **operations)
 {
+	t_list	*ops;
 	t_list	*node;
 	t_list	*target;
 
+	ops = NULL;
 	push(stack_a, stack_b);
 	ft_lstadd_back(operations, ft_lstnew("pb\n"));
 	ft_lstadd_back(operations, sort_3_numbers(stack_a));
 	apply_operations(stack_a, stack_b, sort_3_numbers(stack_a));
 	node = *stack_b;
 	target = find_target(node, stack_a, 1);
-	ft_lstadd_back(operations, push_node_above_target_ops(stack_b, stack_a, node, target));
-	apply_operations(stack_a, stack_b, push_node_above_target_ops(stack_b, stack_a, node, target));
+	ft_lstadd_back(&ops, push_node_target_totop(stack_b, stack_a, node, target));
+	ft_lstadd_back(&ops, ft_lstnew("pa\n"));
+	ft_lstadd_back(operations, ops);
+	apply_operations(stack_a, stack_b, ops);
 	ft_lstadd_back(operations, make_min_on_top_ops(stack_a));
 	apply_operations(stack_a, stack_b, make_min_on_top_ops(stack_a));
 }
@@ -301,7 +337,7 @@ void	turk_sort_numbers(t_list **stack_a, t_list **stack_b, t_list **operations)
 		cheapest_score = INT_MAX;
 		while (tmp)
 		{
-			int current_score = ft_lstsize(push_node_above_target_ops(stack_a, stack_b, tmp, find_target(tmp, stack_b, 0)));
+			int current_score = ft_lstsize(push_node_target_totop(stack_a, stack_b, tmp, find_target(tmp, stack_b, 0)));
 			if (current_score < cheapest_score)
 			{
 				cheapest_score = current_score;
@@ -309,20 +345,20 @@ void	turk_sort_numbers(t_list **stack_a, t_list **stack_b, t_list **operations)
 			}
 			tmp = tmp->next;
 		}
-		ft_lstadd_back(operations, push_node_above_target_ops(stack_a, stack_b, cheapest_node, find_target(cheapest_node, stack_b, 0)));
-		apply_operations(stack_a, stack_b, push_node_above_target_ops(stack_a, stack_b, cheapest_node, find_target(cheapest_node, stack_b, 0)));
+		ft_lstadd_back(operations, push_node_target_totop(stack_a, stack_b, cheapest_node, find_target(cheapest_node, stack_b, 0)));
+		apply_operations(stack_a, stack_b, push_node_target_totop(stack_a, stack_b, cheapest_node, find_target(cheapest_node, stack_b, 0)));
+		ft_lstadd_back(operations, ft_lstnew("pb\n"));
+		apply_operations(stack_a, stack_b, ft_lstnew("pb\n"));
 	}
-
 	ft_lstadd_back(operations, sort_3_numbers(stack_a));
 	apply_operations(stack_a, stack_b, sort_3_numbers(stack_a));
-
 	while (*stack_b)
 	{
 		tmp = *stack_b;
 		cheapest_score = INT_MAX;
 		while (tmp)
 		{
-			int current_score = ft_lstsize(push_node_above_target_ops(stack_b, stack_a, tmp, find_target(tmp, stack_a, 1)));
+			int current_score = ft_lstsize(push_node_target_totop(stack_b, stack_a, tmp, find_target(tmp, stack_a, 1)));
 			if (current_score < cheapest_score)
 			{
 				cheapest_score = current_score;
@@ -330,12 +366,14 @@ void	turk_sort_numbers(t_list **stack_a, t_list **stack_b, t_list **operations)
 			}
 			tmp = tmp->next;
 		}
-
-
-		ft_lstadd_back(operations, push_node_above_target_ops(stack_b, stack_a, cheapest_node, find_target(cheapest_node, stack_a, 1)));
-		apply_operations(stack_a, stack_b, push_node_above_target_ops(stack_b, stack_a, cheapest_node, find_target(cheapest_node, stack_a, 1)));
-
+		ft_lstadd_back(operations, push_node_target_totop(stack_b, stack_a, cheapest_node, find_target(cheapest_node, stack_a, 1)));
+		apply_operations(stack_a, stack_b, push_node_target_totop(stack_b, stack_a, cheapest_node, find_target(cheapest_node, stack_a, 1)));
+		ft_lstadd_back(operations, ft_lstnew("pa\n"));
+		apply_operations(stack_a, stack_b, ft_lstnew("pa\n"));
 	}
+
+	ft_lstadd_back(operations, make_min_on_top_ops(stack_a));
+	apply_operations(stack_a, stack_b, make_min_on_top_ops(stack_a));
 }
 
 t_list	*get_to_sort_operations(t_list **stack_a, t_list **stack_b)
@@ -386,7 +424,5 @@ int	main(int argc, char **argv)
 		ft_putstr_fd(operations->content, 1);
 		operations = operations->next;
 	}
-	print_linked_list(stack_a);
-	print_linked_list(stack_b);
 	return (0);
 }
