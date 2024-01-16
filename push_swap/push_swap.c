@@ -312,13 +312,6 @@ void	sort_4_numbers(t_list **stack_a, t_list **stack_b, t_list **operations)
 	apply_operations(stack_a, stack_b, make_min_on_top_ops(stack_a));
 }
 
-// Turk sort algorithm summary:
-// push two elements to stack b and then assign for each element in stack a a target in stack b 
-// and then find the cheapest node to get to the target by counting the needed operations
-// repeat that until stack a has only 3 elements
-// then sort the 3 elements
-// then do the same thing but with stack b nodes to stack a targets
-// finally make the min on top of stack a
 void	turk_sort_numbers(t_list **stack_a, t_list **stack_b, t_list **operations)
 {
 	int cheapest_score;
