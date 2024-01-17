@@ -6,7 +6,7 @@
 /*   By: mmouhiid <mmouhiid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 22:25:13 by mmouhiid          #+#    #+#             */
-/*   Updated: 2024/01/12 12:05:03 by mmouhiid         ###   ########.fr       */
+/*   Updated: 2024/01/17 00:25:43 by mmouhiid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,4 +31,5 @@ void	iterate_through_args(int argc, char **argv, t_list **stack_a);
 void	apply_swap_push(t_list **stack_a, t_list **stack_b, t_list *operations);
 void	apply_rotate_reverse(t_list **stack_a, t_list **stack_b,
 			t_list *operations);
-void	apply_operations(t_list **stack_a, t_list **stack_b, t_list *operations);
+void	apply_operations(t_list **stack_a, t_list **stack_b,
+			t_list *operations);
