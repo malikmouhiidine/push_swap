@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmouhiid <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mmouhiid <mmouhiid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 00:24:00 by mmouhiid          #+#    #+#             */
-/*   Updated: 2024/01/17 22:41:41 by mmouhiid         ###   ########.fr       */
+/*   Updated: 2024/01/17 23:23:44 by mmouhiid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -310,28 +310,45 @@ void	turk_sort_numbers(t_list **stack_a, t_list **stack_b,
 	ft_lstadd_back(operations, ft_lstnew("pb\n"));
 	ft_lstadd_back(operations, ft_lstnew("pb\n"));
 	cheapest_node = NULL;
+	//while (ft_lstsize(*stack_a) > 3)
+	//{
+		//tmp = *stack_a;
+		//cheapest_score = INT_MAX;
+		//while (tmp)
+		//{
+			//current_score = ft_lstsize(push_node_target_totop(stack_a, stack_b,
+						//tmp, find_target(tmp, stack_b, 0)));
+			//if (current_score < cheapest_score)
+			//{
+				//cheapest_score = current_score;
+				//cheapest_node = tmp;
+			//}
+			//tmp = tmp->next;
+		//}
+		//ft_lstadd_back(operations, push_node_target_totop(stack_a, stack_b,
+				//cheapest_node, find_target(cheapest_node, stack_b, 0)));
+		//apply_operations(stack_a, stack_b, push_node_target_totop(
+				//stack_a, stack_b, cheapest_node,
+				//find_target(cheapest_node, stack_b, 0)));
+		//ft_lstadd_back(operations, ft_lstnew("pb\n"));
+		//apply_operations(stack_a, stack_b, ft_lstnew("pb\n"));
+	//}
+	int median = (*(int *)find_max(*stack_a)->content + *(int *)find_min(*stack_a)->content) / 2;
 	while (ft_lstsize(*stack_a) > 3)
 	{
 		tmp = *stack_a;
-		cheapest_score = INT_MAX;
-		while (tmp)
+		if (*(int *)tmp->content < median)
 		{
-			current_score = ft_lstsize(push_node_target_totop(stack_a, stack_b,
-						tmp, find_target(tmp, stack_b, 0)));
-			if (current_score < cheapest_score)
-			{
-				cheapest_score = current_score;
-				cheapest_node = tmp;
-			}
-			tmp = tmp->next;
+			ft_lstadd_back(operations, ft_lstnew("pb\n"));
+			apply_operations(stack_a, stack_b, ft_lstnew("pb\n"));
+			ft_lstadd_back(operations, ft_lstnew("rrb\n"));
+			apply_operations(stack_a, stack_b, ft_lstnew("rrb\n"));
 		}
-		ft_lstadd_back(operations, push_node_target_totop(stack_a, stack_b,
-				cheapest_node, find_target(cheapest_node, stack_b, 0)));
-		apply_operations(stack_a, stack_b, push_node_target_totop(
-				stack_a, stack_b, cheapest_node,
-				find_target(cheapest_node, stack_b, 0)));
-		ft_lstadd_back(operations, ft_lstnew("pb\n"));
-		apply_operations(stack_a, stack_b, ft_lstnew("pb\n"));
+		else
+		{
+			ft_lstadd_back(operations, ft_lstnew("pb\n"));
+			apply_operations(stack_a, stack_b, ft_lstnew("pb\n"));
+		}
 	}
 	ft_lstadd_back(operations, sort_3_numbers(stack_a));
 	apply_operations(stack_a, stack_b, sort_3_numbers(stack_a));
