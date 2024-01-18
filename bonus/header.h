@@ -6,12 +6,13 @@
 /*   By: mmouhiid <mmouhiid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 22:25:13 by mmouhiid          #+#    #+#             */
-/*   Updated: 2024/01/11 15:30:59 by mmouhiid         ###   ########.fr       */
+/*   Updated: 2024/01/18 23:17:38 by mmouhiid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft/libft.h"
 #include "../get_next_line/get_next_line.h"
+#include <limits.h>
 
 int		ft_strcmp(char *s1, char *s2);
 int		is_valid_int(char *str);

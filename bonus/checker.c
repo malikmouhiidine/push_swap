@@ -6,11 +6,30 @@
 /*   By: mmouhiid <mmouhiid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 22:25:13 by mmouhiid          #+#    #+#             */
-/*   Updated: 2024/01/11 14:41:43 by mmouhiid         ###   ########.fr       */
+/*   Updated: 2024/01/18 23:16:35 by mmouhiid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
+
+void	check_forduplicates(t_list *stack_a)
+{
+	t_list	*tmp;
+	t_list	*tmp2;
+
+	tmp = stack_a;
+	while (tmp)
+	{
+		tmp2 = tmp->next;
+		while (tmp2)
+		{
+			if (*(int *)tmp->content == *(int *)tmp2->content)
+				exit_handler();
+			tmp2 = tmp2->next;
+		}
+		tmp = tmp->next;
+	}
+}
 
 int	main(int argc, char **argv)
 {
@@ -24,6 +43,7 @@ int	main(int argc, char **argv)
 	stack_a = NULL;
 	stack_b = NULL;
 	iterate_through_args(argc, argv, &stack_a);
+	check_forduplicates(stack_a);
 	operations = get_operations();
 	size_diff = ft_lstsize(stack_a);
 	stack_a = apply_operations(stack_a, stack_b, operations);

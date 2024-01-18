@@ -6,7 +6,7 @@
 /*   By: mmouhiid <mmouhiid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 22:25:13 by mmouhiid          #+#    #+#             */
-/*   Updated: 2024/01/18 02:21:14 by mmouhiid         ###   ########.fr       */
+/*   Updated: 2024/01/18 22:50:35 by mmouhiid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,28 @@ int	ft_strcmp(char *s1, char *s2)
 
 int	is_valid_int(char *str)
 {
-	if (*str == '-')
-	{
-		if (!*++str || *str == '0')
-			return (0);
-	}
-	while (*str)
-	{
-		if (*str < '0' || *str++ > '9')
-			return (0);
-	}
-	return (1);
+    int sign = 1;
+    unsigned long long num = 0;
+
+    if (*str == '-')
+    {
+        sign = -1;
+        if (!*++str || *str == '0')
+            return (0);
+    }
+    while (*str)
+    {
+        if (*str < '0' || *str > '9')
+            return (0);
+        if (num > ULLONG_MAX / 10 || (num == ULLONG_MAX / 10 && (*str - '0') > (int)(ULLONG_MAX % 10)))
+            return (0);
+        num = num * 10 + (*str++ - '0');
+        if (sign == 1 && num > INT_MAX)
+            return (0);
+        if (sign == -1 && num > (unsigned long long)INT_MAX + 1)
+            return (0);
+    }
+    return (1);
 }
 
 int	is_valid_operation(char *operation)
@@ -82,6 +93,6 @@ int	is_sorted(t_list *stack)
 
 void	exit_handler(void)
 {
-	ft_putstr_fd("Error\n", 1);
+	ft_putstr_fd("Error\n", 2);
 	exit(1);
 }
