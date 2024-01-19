@@ -6,7 +6,7 @@
 /*   By: mmouhiid <mmouhiid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 22:25:13 by mmouhiid          #+#    #+#             */
-/*   Updated: 2024/01/19 18:37:38 by mmouhiid         ###   ########.fr       */
+/*   Updated: 2024/01/19 20:53:23 by mmouhiid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,14 @@ int	is_valid_int(char *str)
     int sign = 1;
     unsigned long long num = 0;
 
-    if (*str == '-')
+    if (*str == '-' || *str == '+')
     {
-        sign = -1;
-        if (!*++str || *str == '0')
-            return (0);
+        if (*str == '-')
+            sign = -1;
+        ++str;
     }
+    if (!*str)
+        return (0);
     while (*str)
     {
         if (*str < '0' || *str > '9')
