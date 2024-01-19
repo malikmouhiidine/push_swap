@@ -6,7 +6,7 @@
 /*   By: mmouhiid <mmouhiid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 22:25:13 by mmouhiid          #+#    #+#             */
-/*   Updated: 2024/01/19 18:48:07 by mmouhiid         ###   ########.fr       */
+/*   Updated: 2024/01/20 00:48:43 by mmouhiid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,28 +28,31 @@ int	ft_strcmp(char *s1, char *s2)
 
 int	is_valid_int(char *str)
 {
-    int sign = 1;
-    unsigned long long num = 0;
+	int					sign;
+	unsigned long long	num;
 
-    if (*str == '-')
-    {
-        sign = -1;
-        if (!*++str || *str == '0')
-            return (0);
-    }
-    while (*str)
-    {
-        if (*str < '0' || *str > '9')
-            return (0);
-        if (num > ULLONG_MAX / 10 || (num == ULLONG_MAX / 10 && (*str - '0') > (int)(ULLONG_MAX % 10)))
-            return (0);
-        num = num * 10 + (*str++ - '0');
-        if (sign == 1 && num > INT_MAX)
-            return (0);
-        if (sign == -1 && num > (unsigned long long)INT_MAX + 1)
-            return (0);
-    }
-    return (1);
+	sign = 1;
+	num = 0;
+	if (*str == '-')
+	{
+		sign = -1;
+		if (!*++str || *str == '0')
+			return (0);
+	}
+	while (*str)
+	{
+		if (*str < '0' || *str > '9')
+			return (0);
+		if (num > ULLONG_MAX / 10 || (num == ULLONG_MAX / 10
+				&& (*str - '0') > (int)(ULLONG_MAX % 10)))
+			return (0);
+		num = num * 10 + (*str++ - '0');
+		if (sign == 1 && num > INT_MAX)
+			return (0);
+		if (sign == -1 && num > (unsigned long long)INT_MAX + 1)
+			return (0);
+	}
+	return (1);
 }
 
 int	is_valid_operation(char *operation)
