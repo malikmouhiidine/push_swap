@@ -6,7 +6,7 @@
 /*   By: mmouhiid <mmouhiid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 22:25:13 by mmouhiid          #+#    #+#             */
-/*   Updated: 2024/01/08 15:45:37 by mmouhiid         ###   ########.fr       */
+/*   Updated: 2024/01/19 18:49:56 by mmouhiid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_list	*get_operations(void)
 	while (operation)
 	{
 		if (!is_valid_operation(operation))
-			exit_handler();
+			exit_handler(1);
 		ft_lstadd_back(&operations, ft_lstnew(operation));
 		operation = get_next_line(0);
 	}

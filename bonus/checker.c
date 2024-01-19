@@ -6,7 +6,7 @@
 /*   By: mmouhiid <mmouhiid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 22:25:13 by mmouhiid          #+#    #+#             */
-/*   Updated: 2024/01/18 23:16:35 by mmouhiid         ###   ########.fr       */
+/*   Updated: 2024/01/18 23:16:35by mmouhiid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	check_forduplicates(t_list *stack_a)
 		while (tmp2)
 		{
 			if (*(int *)tmp->content == *(int *)tmp2->content)
-				exit_handler();
+				exit_handler(1);
 			tmp2 = tmp2->next;
 		}
 		tmp = tmp->next;
@@ -52,5 +52,6 @@ int	main(int argc, char **argv)
 		ft_putstr_fd("OK\n", 1);
 	else
 		ft_putstr_fd("KO\n", 1);
+	exit_handler(0);
 	return (0);
 }

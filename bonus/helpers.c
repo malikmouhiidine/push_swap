@@ -6,7 +6,7 @@
 /*   By: mmouhiid <mmouhiid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 22:25:13 by mmouhiid          #+#    #+#             */
-/*   Updated: 2024/01/18 23:17:15 by mmouhiid         ###   ########.fr       */
+/*   Updated: 2024/01/19 18:48:07 by mmouhiid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,12 @@ int	is_sorted(t_list *stack)
 	return (1);
 }
 
-void	exit_handler(void)
+void	exit_handler(int code)
 {
-	ft_putstr_fd("Error\n", 1);
-	exit(1);
+	if (code == 1)
+	{
+		ft_putstr_fd("Error\n", 2);
+		exit(1);
+	}
+	exit(0);
 }
