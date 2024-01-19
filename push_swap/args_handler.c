@@ -6,7 +6,7 @@
 /*   By: mmouhiid <mmouhiid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 22:25:13 by mmouhiid          #+#    #+#             */
-/*   Updated: 2024/01/19 15:50:37 by mmouhiid         ###   ########.fr       */
+/*   Updated: 2024/01/19 18:37:23 by mmouhiid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	iterate_through_args(int argc, char **argv, t_list **stack_a)
 	{
 		tmp_nums = ft_split(argv[argc], ' ');
 		if (!tmp_nums || !*tmp_nums)
-			exit_handler();
+			exit_handler(1);
 		i = 0;
 		while (tmp_nums[i])
 			i++;
@@ -35,7 +35,7 @@ void	iterate_through_args(int argc, char **argv, t_list **stack_a)
 				ft_lstadd_front(stack_a, ft_lstnew(num));
 			}
 			else
-				exit_handler();
+				exit_handler(1);
 		}
 		i = 0;
 		while (tmp_nums[i])

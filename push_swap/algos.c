@@ -45,6 +45,7 @@ t_list	*sort_3_numbers(t_list	**stack_a)
 
 void	sort_4_numbers(t_list **stack_a, t_list **stack_b, t_list **operations)
 {
+	t_list	*tmp;
 	t_list	*ops;
 	t_list	*node;
 	t_list	*target;
@@ -61,18 +62,21 @@ void	sort_4_numbers(t_list **stack_a, t_list **stack_b, t_list **operations)
 	ft_lstadd_back(&ops, ft_lstnew("pa\n"));
 	ft_lstadd_back(operations, ops);
 	apply_operations(stack_a, stack_b, ops);
-	ft_lstadd_back(operations, make_min_on_top_ops(stack_a));
-	apply_operations(stack_a, stack_b, make_min_on_top_ops(stack_a));
+	tmp = make_min_on_top_ops(stack_a);
+	ft_lstadd_back(operations, tmp);
+	apply_operations(stack_a, stack_b, tmp);
 }
 
+// median is used in the last part as a holder of the address of the
+// list wich is bad design and its better to be fixed in the future
 void	turk_sort_numbers(t_list **stack_a, t_list **stack_b,
 			t_list **operations)
 {
-	int		median;
-	int		current_score;
-	int		cheapest_score;
-	t_list	*cheapest_node;
-	t_list	*tmp;
+	long long		median;
+	int				current_score;
+	int				cheapest_score;
+	t_list			*cheapest_node;
+	t_list			*tmp;
 
 	push(stack_a, stack_b);
 	push(stack_a, stack_b);
@@ -103,34 +107,34 @@ void	turk_sort_numbers(t_list **stack_a, t_list **stack_b,
 	tmp = sort_3_numbers(stack_a);
 	ft_lstadd_back(operations, tmp);
 	apply_operations(stack_a, stack_b, tmp);
-	exit(0);
 	while (*stack_b)
 	{
 		tmp = *stack_b;
 		cheapest_score = INT_MAX;
 		while (tmp)
 		{
-			current_score = ft_lstsize(push_node_target_totop(stack_b, stack_a,
-						tmp, find_target(tmp, stack_a, 1)));
+			median = (long long)push_node_target_totop(stack_b, stack_a, tmp, find_target(tmp, stack_a, 1));
+			current_score = ft_lstsize((t_list *)median);
 			if (current_score < cheapest_score)
 			{
 				cheapest_score = current_score;
 				cheapest_node = tmp;
 			}
+			while (median)
+			{
+				free((t_list *)median);
+				median = (long long)(((t_list *)median)->next);
+			}
 			tmp = tmp->next;
 		}
-		ft_lstadd_back(operations, push_node_target_totop(stack_b, stack_a,
-				cheapest_node, find_target(cheapest_node, stack_a, 1)));
-		apply_operations(stack_a, stack_b, push_node_target_totop(
-				stack_b, stack_a,
-				cheapest_node, find_target(cheapest_node, stack_a, 1)));
-		ft_lstadd_back(operations, ft_lstnew("pa\n"));
-		apply_operations(stack_a, stack_b, ft_lstnew("pa\n"));
+		tmp = push_node_target_totop(stack_b, stack_a, cheapest_node, find_target(cheapest_node, stack_a, 1));
+		ft_lstadd_back(operations, tmp);
+		apply_operations(stack_a, stack_b, tmp);
+		tmp = ft_lstnew("pa\n");
+		ft_lstadd_back(operations, tmp);
+		apply_operations(stack_a, stack_b, tmp);
 	}
-	ft_lstadd_back(operations, make_min_on_top_ops(stack_a));
-	apply_operations(stack_a, stack_b, make_min_on_top_ops(stack_a));
-	if (cheapest_node)
-		free(cheapest_node);
-	if (tmp)
-		free(tmp);
+	tmp = make_min_on_top_ops(stack_a);
+	ft_lstadd_back(operations, tmp);
+	apply_operations(stack_a, stack_b, tmp);
 }

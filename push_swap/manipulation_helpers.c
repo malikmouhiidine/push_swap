@@ -143,6 +143,7 @@ t_list	*find_target(t_list *node, t_list **stack, int closest_bigger)
 
 t_list	*get_to_sort_operations(t_list **stack_a, t_list **stack_b)
 {
+	t_list 	*tmp;
 	t_list	*operations;
 
 	operations = NULL;
@@ -156,8 +157,9 @@ t_list	*get_to_sort_operations(t_list **stack_a, t_list **stack_b)
 	}
 	else if (ft_lstsize(*stack_a) == 3)
 	{
-		ft_lstadd_back(&operations, sort_3_numbers(stack_a));
-		apply_operations(stack_a, stack_b, sort_3_numbers(stack_a));
+		tmp = sort_3_numbers(stack_a);
+		ft_lstadd_back(&operations, tmp);
+		apply_operations(stack_a, stack_b, tmp);
 		return (operations);
 	}
 	else if (ft_lstsize(*stack_a) == 4)
