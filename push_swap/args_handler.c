@@ -6,7 +6,7 @@
 /*   By: mmouhiid <mmouhiid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 22:25:13 by mmouhiid          #+#    #+#             */
-/*   Updated: 2024/01/18 02:21:10 by mmouhiid         ###   ########.fr       */
+/*   Updated: 2024/01/19 15:50:37 by mmouhiid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,5 +37,9 @@ void	iterate_through_args(int argc, char **argv, t_list **stack_a)
 			else
 				exit_handler();
 		}
+		i = 0;
+		while (tmp_nums[i])
+			free(tmp_nums[i++]);
+		free(tmp_nums);
 	}
 }

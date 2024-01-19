@@ -6,7 +6,7 @@
 /*   By: mmouhiid <mmouhiid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 00:24:00 by mmouhiid          #+#    #+#             */
-/*   Updated: 2024/01/18 23:11:33 by mmouhiid         ###   ########.fr       */
+/*   Updated: 2024/01/19 15:55:43 by mmouhiid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,18 @@ void	check_forduplicates(t_list *stack_a)
 	}
 }
 
+void	ft_leaks()
+{
+	system("leaks push_swap");
+}
+
 int	main(int argc, char **argv)
 {
 	t_list	*operations;
 	t_list	*stack_a;
 	t_list	*stack_b;
 
+	atexit(ft_leaks);
 	if (argc < 2)
 		return (0);
 	stack_a = NULL;

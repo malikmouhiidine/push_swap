@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   algos.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmouhiid <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mmouhiid <mmouhiid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 02:09:20 by mmouhiid          #+#    #+#             */
-/*   Updated: 2024/01/18 02:20:28 by mmouhiid         ###   ########.fr       */
+/*   Updated: 2024/01/19 16:27:37by mmouhiid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,19 +86,24 @@ void	turk_sort_numbers(t_list **stack_a, t_list **stack_b,
 		tmp = *stack_a;
 		if (*(int *)tmp->content < median)
 		{
-			ft_lstadd_back(operations, ft_lstnew("pb\n"));
-			apply_operations(stack_a, stack_b, ft_lstnew("pb\n"));
-			ft_lstadd_back(operations, ft_lstnew("rrb\n"));
-			apply_operations(stack_a, stack_b, ft_lstnew("rrb\n"));
+			tmp = ft_lstnew("pb\n");
+			ft_lstadd_back(operations, tmp);
+			apply_operations(stack_a, stack_b, tmp);
+			tmp = ft_lstnew("rrb\n");
+			ft_lstadd_back(operations, tmp);
+			apply_operations(stack_a, stack_b, tmp);
 		}
 		else
 		{
-			ft_lstadd_back(operations, ft_lstnew("pb\n"));
-			apply_operations(stack_a, stack_b, ft_lstnew("pb\n"));
+			tmp = ft_lstnew("pb\n");
+			ft_lstadd_back(operations, tmp);
+			apply_operations(stack_a, stack_b, tmp);
 		}
 	}
-	ft_lstadd_back(operations, sort_3_numbers(stack_a));
-	apply_operations(stack_a, stack_b, sort_3_numbers(stack_a));
+	tmp = sort_3_numbers(stack_a);
+	ft_lstadd_back(operations, tmp);
+	apply_operations(stack_a, stack_b, tmp);
+	exit(0);
 	while (*stack_b)
 	{
 		tmp = *stack_b;
@@ -124,4 +129,8 @@ void	turk_sort_numbers(t_list **stack_a, t_list **stack_b,
 	}
 	ft_lstadd_back(operations, make_min_on_top_ops(stack_a));
 	apply_operations(stack_a, stack_b, make_min_on_top_ops(stack_a));
+	if (cheapest_node)
+		free(cheapest_node);
+	if (tmp)
+		free(tmp);
 }
