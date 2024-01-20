@@ -113,7 +113,8 @@ void	turk_sort_numbers(t_list **stack_a, t_list **stack_b,
 		cheapest_score = INT_MAX;
 		while (tmp)
 		{
-			median = (long long)push_node_target_totop(stack_b, stack_a, tmp, find_target(tmp, stack_a, 1));
+			median = (long long)push_node_target_totop(stack_b,
+					stack_a, tmp, find_target(tmp, stack_a, 1));
 			current_score = ft_lstsize((t_list *)median);
 			if (current_score < cheapest_score)
 			{
@@ -127,7 +128,8 @@ void	turk_sort_numbers(t_list **stack_a, t_list **stack_b,
 			}
 			tmp = tmp->next;
 		}
-		tmp = push_node_target_totop(stack_b, stack_a, cheapest_node, find_target(cheapest_node, stack_a, 1));
+		tmp = push_node_target_totop(stack_b, stack_a,
+				cheapest_node, find_target(cheapest_node, stack_a, 1));
 		ft_lstadd_back(operations, tmp);
 		apply_operations(stack_a, stack_b, tmp);
 		tmp = ft_lstnew("pa\n");

@@ -6,7 +6,7 @@
 /*   By: mmouhiid <mmouhiid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 02:14:18 by mmouhiid          #+#    #+#             */
-/*   Updated: 2024/01/19 15:52:22y mmouhiid         ###   ########.fr       */
+/*   Updated: 2024/01/19 15:52:22 by mmouhiid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ t_list	*find_target(t_list *node, t_list **stack, int closest_bigger)
 
 t_list	*get_to_sort_operations(t_list **stack_a, t_list **stack_b)
 {
-	t_list 	*tmp;
+	t_list	*tmp;
 	t_list	*operations;
 
 	operations = NULL;
