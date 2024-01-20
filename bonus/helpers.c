@@ -6,7 +6,7 @@
 /*   By: mmouhiid <mmouhiid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 22:25:13 by mmouhiid          #+#    #+#             */
-/*   Updated: 2024/01/20 00:48:43 by mmouhiid         ###   ########.fr       */
+/*   Updated: 2024/01/20 18:07:02 by mmouhiid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,21 @@ int	ft_strcmp(char *s1, char *s2)
 	return (s1[i] - s2[i]);
 }
 
+int	is_digit_and_within_range(char *str, unsigned long long *num, int sign)
+{
+	if (*str < '0' || *str > '9')
+		return (0);
+	if (*num > ULLONG_MAX / 10 || (*num == ULLONG_MAX / 10
+			&& (*str - '0') > (int)(ULLONG_MAX % 10)))
+		return (0);
+	*num = *num * 10 + (*str - '0');
+	if (sign == 1 && *num > INT_MAX)
+		return (0);
+	if (sign == -1 && *num > (unsigned long long)INT_MAX + 1)
+		return (0);
+	return (1);
+}
+
 int	is_valid_int(char *str)
 {
 	int					sign;
@@ -33,24 +48,19 @@ int	is_valid_int(char *str)
 
 	sign = 1;
 	num = 0;
-	if (*str == '-')
+	if (*str == '-' || *str == '+')
 	{
-		sign = -1;
-		if (!*++str || *str == '0')
-			return (0);
+		if (*str == '-')
+			sign = -1;
+		++str;
 	}
+	if (!*str)
+		return (0);
 	while (*str)
 	{
-		if (*str < '0' || *str > '9')
+		if (!is_digit_and_within_range(str, &num, sign))
 			return (0);
-		if (num > ULLONG_MAX / 10 || (num == ULLONG_MAX / 10
-				&& (*str - '0') > (int)(ULLONG_MAX % 10)))
-			return (0);
-		num = num * 10 + (*str++ - '0');
-		if (sign == 1 && num > INT_MAX)
-			return (0);
-		if (sign == -1 && num > (unsigned long long)INT_MAX + 1)
-			return (0);
+		str++;
 	}
 	return (1);
 }
@@ -80,26 +90,4 @@ int	is_valid_operation(char *operation)
 	else if (!ft_strcmp(operation, "rrr\n"))
 		return (1);
 	return (0);
-}
-
-int	is_sorted(t_list *stack)
-{
-	while (stack && stack->next)
-	{
-		if (stack->next && (*(int *)stack->next->content
-				< *(int *)stack->content))
-			return (0);
-		stack = stack->next;
-	}
-	return (1);
-}
-
-void	exit_handler(int code)
-{
-	if (code == 1)
-	{
-		ft_putstr_fd("Error\n", 2);
-		exit(1);
-	}
-	exit(0);
 }
