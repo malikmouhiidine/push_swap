@@ -6,13 +6,21 @@
 /*   By: mmouhiid <mmouhiid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 22:25:13 by mmouhiid          #+#    #+#             */
-/*   Updated: 2024/01/19 18:37:02 by mmouhiid         ###   ########.fr       */
+/*   Updated: 2024/01/21 09:29:45 by mmouhiid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft/libft.h"
 #include "../get_next_line/get_next_line.h"
 #include <limits.h>
+
+typedef struct s_data
+{
+	int		node_index;
+	int		target_index;
+	int		stack_b_size;
+	int		stack_a_size;
+}	t_data;
 
 int		ft_strcmp(char *s1, char *s2);
 int		is_valid_int(char *str);
