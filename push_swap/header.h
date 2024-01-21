@@ -6,13 +6,22 @@
 /*   By: mmouhiid <mmouhiid@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/23 22:25:13 by mmouhiid          #+#    #+#             */
-/*   Updated: 2024/01/21 09:29:45 by mmouhiid         ###   ########.fr       */
+/*   Updated: 2024/01/21 10:17:29 by mmouhiid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft/libft.h"
 #include "../get_next_line/get_next_line.h"
 #include <limits.h>
+
+typedef struct s_turk_data
+{
+	long long		median;
+	int				current_score;
+	int				cheapest_score;
+	t_list			*cheapest_node;
+	t_list			*tmp;
+}	t_turk_data;
 
 typedef struct s_data
 {
